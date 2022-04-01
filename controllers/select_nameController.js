@@ -19,6 +19,18 @@ class Select_nameController {
         return res.json(selects);
     }
 
+    async getAll(req, res, next) {
+        try {
+          const {itemId} = req.body;
+          const names = await Select_name.findAll({
+              where: { itemId: itemId }
+            });
+          return res.json(names);
+        } catch(e) {
+          next(ApiError.badRequest(e.message));
+      }
+      }
+
     async delete(req, res, next) {
         try {
             const {id} = req.params;

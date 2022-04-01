@@ -36,7 +36,11 @@ class ItemController {
   }
 
   async get(req, res) {
-    const items = await Item.findAll();
+    const items = await Item.findAll({
+      order: [
+        ['num']
+    ]
+    });
     return res.json(items);
   }
 

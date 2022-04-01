@@ -9,8 +9,8 @@ const config = {
   password: "!QAZ2wsx",
 };
 
-const generateJwt = (id, login, role) => {
-  return jwt.sign({ id, login, role }, process.env.SECRET_KEY, {
+const generateJwt = (id, login, role, name) => {
+  return jwt.sign({ id, login, role, name }, process.env.SECRET_KEY, {
     expiresIn: "24h",
   });
 };
@@ -40,7 +40,7 @@ async function findName(next, login, role, res) {
 
 async function end(login, role, sec, res) {
   const user = await User.create({ login, role, fullname: sec });
-  const token = generateJwt(user.id, user.login, user.role);
+  const token = generateJwt(user.id, user.login, user.role, user.fullname);
   return res.json({ token });
 }
 
@@ -48,7 +48,7 @@ async function createAdm(login, role, res, next) {
   const candidate = await User.findOne({ where: { login } });
   if (candidate) {
     console.log("Authenticated!");
-    const token = generateJwt(candidate.id, candidate.login, candidate.role);
+    const token = generateJwt(candidate.id, candidate.login, candidate.role, candidate.fullname);
     return res.json({ token });
   } else {
     console.log("Authenticated!");
@@ -79,7 +79,7 @@ class UserController {
   }
 
   async check(req, res) {
-    const token = generateJwt(req.user.id, req.user.login, req.user.role);
+    const token = generateJwt(req.user.id, req.user.login, req.user.role, req.user.fullname);
     return res.json({ token });
   }
 }

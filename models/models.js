@@ -29,7 +29,7 @@ const Item = sequelize.define('item', {
 const Report = sequelize.define('report', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     value: {type: DataTypes.INTEGER},
-    ball_value: {type: DataTypes.INTEGER},
+    ball_value: {type: DataTypes.INTEGER}, //Numeric
     selectvalue: {type: DataTypes.STRING},
 })
 
@@ -42,7 +42,7 @@ const Select_name = sequelize.define('select_name', {
 
 const Result = sequelize.define('result', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    result: {type: DataTypes.INTEGER},
+    result: {type: DataTypes.NUMBER}, //Numeric
     userId: {type: DataTypes.INTEGER},
 })
 

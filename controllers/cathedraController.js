@@ -51,6 +51,14 @@ class CathedraController {
         }
     }
 
+    async getOne(req, res) {
+        const {id} = req.params;
+        const cathedra = await Cathedra.findOne({
+            where: {id}
+        })
+        return res.json(cathedra);
+      }
+
 }
 
 module.exports = new CathedraController();

@@ -5,7 +5,11 @@ class ResultController {
     
     async create(req, res, next) {
         try {
-            const {result, userId} = req.body;
+            const {result, userId } = req.body;
+            const candidate = await Result.findOne({ where: { userId } });
+            if (candidate) {
+              return next(ApiError.badRequest("Ваша анкета уже добавлена!"));
+            }
             const resultt = await Result.create({result, userId});
             return res.json(resultt);
          } catch (e) {
@@ -25,7 +29,7 @@ class ResultController {
                 res.status(400).json({message: "Id не указан"});
             }
             const result = await Result.destroy({
-                where: { id: id }
+                where: { userId: id }
               });
             return res.json(result);
         } catch(e) {
@@ -50,6 +54,14 @@ class ResultController {
             next(ApiError.badRequest(e.message));
         }
     }
+
+    async getOne(req, res) {
+        const {id} = req.params;
+        const result = await Result.findOne({
+            where: {userId: id}
+        })
+        return res.json(result);
+      }
 
 }
 

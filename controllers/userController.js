@@ -82,6 +82,49 @@ class UserController {
     const token = generateJwt(req.user.id, req.user.login, req.user.role, req.user.fullname);
     return res.json({ token });
   }
+
+  async update(req, res, next) {
+    try {
+        const id = req.params.id;
+        const user = req.body;
+        if (!user.id) {
+            res.status(400).json( {message: 'Id не указан'});
+        }
+        const updatedUser = await User.update(user, {
+            where: {id: id},
+        })
+        
+        return res.json(updatedUser);
+    } catch(e) {
+        
+        next(ApiError.badRequest(e.message));
+    }
+}
+
+async getOne(req, res) {
+  const {id} = req.params;
+  const user = await User.findOne({
+      where: {id}
+  })
+  return res.json(user);
+}
+
+async find(req, res, next) {
+  try {
+    const { id } = req.params;
+    //console.log(req.params);
+    if (!id) {
+      res.status(400).json({ message: "Id не указан" });
+    }
+    const users = await User.findAll({
+      where: { cathedraId: id },
+    });
+    return res.json(users);
+  } catch (e) {
+    next(ApiError.badRequest(e.message));
+  }
+}
+
 }
 
 module.exports = new UserController();

@@ -8,5 +8,6 @@ router.get('/', select_nameController.get);
 router.delete('/:id', select_nameController.delete);
 router.put('/:id', select_nameController.update);
 router.post('/find', select_nameController.getAll);
+router.get('/:id', select_nameController.getOne);
 
 module.exports = router;

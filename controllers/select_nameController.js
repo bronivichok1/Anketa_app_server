@@ -64,6 +64,15 @@ class Select_nameController {
         }
     }
 
+    async getOne(req, res) {
+        const {id} = req.params;
+        const sel = await Select_name.findOne({
+            where: {id}
+        })
+        return res.json(sel);
+      }
+      
+
 }
 
 module.exports = new Select_nameController();

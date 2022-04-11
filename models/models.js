@@ -30,6 +30,7 @@ const Report = sequelize.define('report', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     value: {type: DataTypes.INTEGER},
     ball_value: {type: DataTypes.INTEGER},
+    selectvalue: {type: DataTypes.STRING},
 })
 
 const Select_name = sequelize.define('select_name', {
@@ -43,6 +44,13 @@ const Result = sequelize.define('result', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     result: {type: DataTypes.INTEGER},
     userId: {type: DataTypes.INTEGER},
+})
+
+const Massiv = sequelize.define('massiv', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    value: {type: DataTypes.INTEGER},
+    userId: {type: DataTypes.INTEGER},
+    itemId: {type: DataTypes.INTEGER},
 })
 
 Cathedra.hasMany(User);
@@ -70,4 +78,5 @@ module.exports = {
     Select_name,
     Result,
     Cathedra,
+    Massiv
 }

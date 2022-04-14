@@ -1,11 +1,11 @@
 const ApiError = require("../error/ApiError");
-const { Massiv } = require("../models/models");
+const { MassivLocal } = require("../models/models");
 
-class MassivController {
+class MassivLocalController {
   async create(req, res, next) {
     try {
       const { value, userId, itemId } = req.body;
-      const massiv = await Massiv.create({ value, userId, itemId });
+      const massiv = await MassivLocal.create({ value, userId, itemId });
       return res.json(massiv);
     } catch (e) {
       next(ApiError.badRequest(e.message));
@@ -18,7 +18,7 @@ class MassivController {
       if (!id) {
         res.status(400).json({ message: "Id не указан" });
       }
-      const massivs = await Massiv.findAll({
+      const massivs = await MassivLocal.findAll({
         where: { userId: id },
       });
       return res.json(massivs);
@@ -34,7 +34,7 @@ class MassivController {
       if (!massiv.id) {
         res.status(400).json({ message: "Id не указан" });
       }
-      const updatedMassiv = await Massiv.update(massiv, {
+      const updatedMassiv = await MassivLocal.update(massiv, {
         where: { id: id },
       });
 
@@ -51,7 +51,7 @@ class MassivController {
       if (!id) {
         res.status(400).json({ message: "Id не указан" });
       }
-      const massiv = await Massiv.destroy({
+      const massiv = await MassivLocal.destroy({
         where: { userId: id },
       });
       return res.json(massiv);
@@ -66,7 +66,7 @@ class MassivController {
       if (!id) {
         res.status(400).json({ message: "Id не указан" });
       }
-      const massiv = await Massiv.destroy({
+      const massiv = await MassivLocal.destroy({
         where: { id: id },
       });
       return res.json(massiv);
@@ -79,4 +79,4 @@ class MassivController {
 
 
 
-module.exports = new MassivController();
+module.exports = new MassivLocalController();

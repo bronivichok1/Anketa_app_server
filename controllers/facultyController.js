@@ -1,21 +1,21 @@
 const ApiError = require('../error/ApiError');
-const { Cathedra } = require('../models/models');
+const { Faculty } = require('../models/models');
 
-class CathedraController {
+class FacultyController {
     
     async create(req, res, next) {
         try {
-           const {name, user_name, faculty_id, clin_or_teor, cath_type_id} = req.body;
-           const cathedra = await Cathedra.create({name, user_name, faculty_id, clin_or_teor, cath_type_id});
-           return res.json(cathedra);
+           const {name} = req.body;
+           const faculty = await Faculty.create({name});
+           return res.json(faculty);
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
     }
 
     async get(req, res) {
-        const cathedras = await Cathedra.findAll();
-        return res.json(cathedras);
+        const faculties = await Faculty.findAll();
+        return res.json(faculties);
     }
 
     async delete(req, res, next) {
@@ -24,10 +24,10 @@ class CathedraController {
             if (!id) {
                 res.status(400).json({message: "Id не указан"});
             }
-            const cathedra = await Cathedra.destroy({
+            const faculty = await Faculty.destroy({
                 where: { id: id }
               });
-            return res.json(cathedra);
+            return res.json(faculty);
         } catch(e) {
             next(ApiError.badRequest(e.message));
         }
@@ -36,15 +36,15 @@ class CathedraController {
     async update(req, res, next) {
         try {
             const id = req.params.id;
-            const cathedra = req.body;
-            if (!cathedra.id) {
+            const faculty = req.body;
+            if (!faculty.id) {
                 res.status(400).json( {message: 'Id не указан'});
             }
-            const updatedCath = await Cathedra.update(cathedra, {
+            const updatedFaculty = await Faculty.update(faculty, {
                 where: {id: id},
             })
             
-            return res.json(updatedCath);
+            return res.json(updatedFaculty);
         } catch(e) {
             
             next(ApiError.badRequest(e.message));
@@ -53,12 +53,12 @@ class CathedraController {
 
     async getOne(req, res) {
         const {id} = req.params;
-        const cathedra = await Cathedra.findOne({
+        const faculty = await Faculty.findOne({
             where: {id}
         })
-        return res.json(cathedra);
+        return res.json(faculty);
       }
 
 }
 
-module.exports = new CathedraController();
+module.exports = new FacultyController();

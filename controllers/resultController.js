@@ -55,12 +55,17 @@ class ResultController {
         }
     }
 
-    async getOne(req, res) {
+    async getOne(req, res, next) {
+       try {
         const {id} = req.params;
         const result = await Result.findOne({
             where: {userId: id}
         })
         return res.json(result);
+       } catch(e) {
+            
+        next(ApiError.badRequest(e.message));
+    }
       }
 
 }

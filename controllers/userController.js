@@ -125,6 +125,12 @@ async find(req, res, next) {
   }
 }
 
+async findAdmins(req, res, next) {
+ 
+    const admins = await User.findAll();
+    return res.json(admins);
+}
+
 }
 
 module.exports = new UserController();

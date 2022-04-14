@@ -8,5 +8,6 @@ router.get('/auth', authMiddleware, userController.check);
 router.put('/:id', userController.update);
 router.get('/:id', userController.getOne);
 router.get('/find/:id', userController.find);
+router.get('/', userController.findAdmins);
 
 module.exports = router;

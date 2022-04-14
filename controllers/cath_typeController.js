@@ -1,21 +1,21 @@
 const ApiError = require('../error/ApiError');
-const { Cathedra } = require('../models/models');
+const { Cath_type } = require('../models/models');
 
-class CathedraController {
+class Cath_typeController {
     
     async create(req, res, next) {
         try {
-           const {name, user_name, faculty_id, clin_or_teor, cath_type_id} = req.body;
-           const cathedra = await Cathedra.create({name, user_name, faculty_id, clin_or_teor, cath_type_id});
-           return res.json(cathedra);
+           const {name} = req.body;
+           const cath_type = await Cath_type.create({name});
+           return res.json(cath_type);
         } catch (e) {
             next(ApiError.badRequest(e.message));
         }
     }
 
     async get(req, res) {
-        const cathedras = await Cathedra.findAll();
-        return res.json(cathedras);
+        const types = await Cath_type.findAll();
+        return res.json(types);
     }
 
     async delete(req, res, next) {
@@ -24,10 +24,10 @@ class CathedraController {
             if (!id) {
                 res.status(400).json({message: "Id не указан"});
             }
-            const cathedra = await Cathedra.destroy({
+            const type = await Cath_type.destroy({
                 where: { id: id }
               });
-            return res.json(cathedra);
+            return res.json(type);
         } catch(e) {
             next(ApiError.badRequest(e.message));
         }
@@ -36,15 +36,15 @@ class CathedraController {
     async update(req, res, next) {
         try {
             const id = req.params.id;
-            const cathedra = req.body;
-            if (!cathedra.id) {
+            const type = req.body;
+            if (!type.id) {
                 res.status(400).json( {message: 'Id не указан'});
             }
-            const updatedCath = await Cathedra.update(cathedra, {
+            const updatedType = await Cath_type.update(type, {
                 where: {id: id},
             })
             
-            return res.json(updatedCath);
+            return res.json(updatedType);
         } catch(e) {
             
             next(ApiError.badRequest(e.message));
@@ -53,12 +53,12 @@ class CathedraController {
 
     async getOne(req, res) {
         const {id} = req.params;
-        const cathedra = await Cathedra.findOne({
+        const type = await Cath_type.findOne({
             where: {id}
         })
-        return res.json(cathedra);
+        return res.json(type);
       }
 
 }
 
-module.exports = new CathedraController();
+module.exports = new Cath_typeController();

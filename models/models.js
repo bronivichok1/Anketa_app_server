@@ -12,6 +12,9 @@ const Cathedra = sequelize.define('cathedra', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, allowNull: false},
     user_name: {type: DataTypes.STRING},
+    faculty_id: {type: DataTypes.INTEGER},
+    clin_or_teor: {type: DataTypes.STRING},
+    cath_type_id: {type: DataTypes.INTEGER},
 })
 
 const Item = sequelize.define('item', {
@@ -29,8 +32,10 @@ const Item = sequelize.define('item', {
 const Report = sequelize.define('report', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     value: {type: DataTypes.INTEGER},
-    ball_value: {type: DataTypes.INTEGER(1).UNSIGNED.ZEROFILL}, //Numeric
+    ball_value: {type: DataTypes.INTEGER}, //Numeric
     selectvalue: {type: DataTypes.STRING},
+    itemId: {type: DataTypes.INTEGER},
+    resultId: {type: DataTypes.INTEGER},
 })
 
 const Select_name = sequelize.define('select_name', {
@@ -42,7 +47,7 @@ const Select_name = sequelize.define('select_name', {
 
 const Result = sequelize.define('result', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    result: {type: DataTypes.INTEGER(1).UNSIGNED.ZEROFILL}, //Numeric
+    result: {type: DataTypes.INTEGER}, //Numeric
     userId: {type: DataTypes.INTEGER},
 })
 
@@ -52,6 +57,33 @@ const Massiv = sequelize.define('massiv', {
     userId: {type: DataTypes.INTEGER},
     itemId: {type: DataTypes.INTEGER},
 })
+
+const ReportLocal = sequelize.define('reportlocal', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    value: {type: DataTypes.INTEGER},
+    ball_value: {type: DataTypes.INTEGER}, //Numeric
+    selectvalue: {type: DataTypes.STRING},
+    itemId: {type: DataTypes.INTEGER},
+    resultId: {type: DataTypes.INTEGER},
+})
+
+const MassivLocal = sequelize.define('massivlocal', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    value: {type: DataTypes.INTEGER},
+    userId: {type: DataTypes.INTEGER},
+    itemId: {type: DataTypes.INTEGER},
+})
+
+const Faculty = sequelize.define('faculty', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+})
+
+const Cath_type = sequelize.define('cath_type', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+})
+
 
 Cathedra.hasMany(User);
 User.belongsTo(Cathedra);
@@ -71,6 +103,9 @@ Select_name.belongsTo(Item);
 Result.hasMany(Report);
 Report.belongsTo(Result);
 
+User.hasOne(ReportLocal);
+ReportLocal.belongsTo(User);
+
 module.exports = {
     User,
     Item,
@@ -78,5 +113,9 @@ module.exports = {
     Select_name,
     Result,
     Cathedra,
-    Massiv
+    Massiv,
+    ReportLocal,
+    MassivLocal,
+    Faculty,
+    Cath_type
 }

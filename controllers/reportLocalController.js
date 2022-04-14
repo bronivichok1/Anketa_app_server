@@ -1,12 +1,12 @@
 const ApiError = require('../error/ApiError');
-const { Report } = require('../models/models');
+const { ReportLocal } = require('../models/models');
 
-class ReportController {
+class ReportLocalController {
     
     async create(req, res, next) {
         try {
             const {value, ball_value, userId, itemId, resultId, selectvalue} = req.body;
-            const report = await Report.create({value, ball_value, userId, itemId, resultId, selectvalue});
+            const report = await ReportLocal.create({value, ball_value, userId, itemId, resultId, selectvalue});
             return res.json(report);
          } catch (e) {
              next(ApiError.badRequest(e.message));
@@ -19,7 +19,7 @@ class ReportController {
           if (!id) {
             res.status(400).json({ message: "Id не указан" });
           }
-          const reports = await Report.findAll({
+          const reports = await ReportLocal.findAll({
             where: { userId: id },
           });
           return res.json(reports);
@@ -34,7 +34,7 @@ class ReportController {
             if (!id) {
                 res.status(400).json({message: "Id не указан"});
             }
-            const report = await Report.destroy({
+            const report = await ReportLocal.destroy({
                 where: { userId: id }
               });
             return res.json(report);
@@ -51,7 +51,7 @@ class ReportController {
                 res.status(400).json( {message: 'Id не указан'});
             }
 
-            const updatedReport = await Report.update(report, {
+            const updatedReport = await ReportLocal.update(report, {
                 where: {id: id},
             })
 
@@ -64,7 +64,7 @@ class ReportController {
 
     async getOne(req, res) {
         const {id} = req.params;
-        const report = await Report.findOne({
+        const report = await ReportLocal.findOne({
             where: {itemId: id}
         })
         return res.json(report);
@@ -73,4 +73,4 @@ class ReportController {
 
 }
 
-module.exports = new ReportController();
+module.exports = new ReportLocalController();

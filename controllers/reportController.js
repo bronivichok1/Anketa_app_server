@@ -5,8 +5,8 @@ class ReportController {
     
     async create(req, res, next) {
         try {
-            const {value, ball_value, userId, itemId, resultId, selectvalue} = req.body;
-            const report = await Report.create({value, ball_value, userId, itemId, resultId, selectvalue});
+            const {value, ball_value, userId, itemId, resultId, selectvalue, cathedra_id} = req.body;
+            const report = await Report.create({value, ball_value, userId, itemId, resultId, selectvalue, cathedra_id});
             return res.json(report);
          } catch (e) {
              next(ApiError.badRequest(e.message));
@@ -21,6 +21,21 @@ class ReportController {
           }
           const reports = await Report.findAll({
             where: { userId: id },
+          });
+          return res.json(reports);
+        } catch (e) {
+          next(ApiError.badRequest(e.message));
+        }
+      }
+
+      async getByCath(req, res, next) {
+        try {
+          const { id } = req.params;
+          if (!id) {
+            res.status(400).json({ message: "Id не указан" });
+          }
+          const reports = await Report.findAll({
+            where: { cathedra_id: id },
           });
           return res.json(reports);
         } catch (e) {
@@ -69,6 +84,21 @@ class ReportController {
         })
         return res.json(report);
       }
+
+      async deleteOne(req, res, next) {
+        try {
+            const {id} = req.params;
+            if (!id) {
+                res.status(400).json({message: "Id не указан"});
+            }
+            const report = await Report.destroy({
+                where: { id: id }
+              });
+            return res.json(report);
+        } catch(e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
 
 
 }

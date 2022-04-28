@@ -7,5 +7,6 @@ router.get('/', resultController.get);
 router.delete('/:id', resultController.delete);
 router.put('/:id', resultController.update);
 router.get('/:id', resultController.getOne);
+router.get('/cath/:id', resultController.getByCath);
 
 module.exports = router;

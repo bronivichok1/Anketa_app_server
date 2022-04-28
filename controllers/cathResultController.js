@@ -1,16 +1,16 @@
 const ApiError = require('../error/ApiError');
-const { Result } = require('../models/models');
+const { CathResult } = require('../models/models');
 
-class ResultController {
+class CathResultController {
     
     async create(req, res, next) {
         try {
-            const {result, userId, cathedra_id } = req.body;
-            const candidate = await Result.findOne({ where: { userId } });
+            const {result, cathedraId } = req.body;
+            const candidate = await CathResult.findOne({ where: { cathedraId } });
             if (candidate) {
-              return next(ApiError.badRequest("Ваша анкета уже добавлена!"));
+              return next(ApiError.badRequest("Ваш отчёт уже добавлен!"));
             }
-            const resultt = await Result.create({result, userId, cathedra_id});
+            const resultt = await CathResult.create({result, cathedraId});
             return res.json(resultt);
          } catch (e) {
              next(ApiError.badRequest(e.message));
@@ -18,24 +18,9 @@ class ResultController {
     }
 
     async get(req, res) {
-        const results = await Result.findAll();
+        const results = await CathResult.findAll();
         return res.json(results);
     }
-
-    async getByCath(req, res, next) {
-        try {
-          const { id } = req.params;
-          if (!id) {
-            res.status(400).json({ message: "Id не указан" });
-          }
-          const reports = await Result.findAll({
-            where: { cathedra_id: id },
-          });
-          return res.json(reports);
-        } catch (e) {
-          next(ApiError.badRequest(e.message));
-        }
-      }
 
     async delete(req, res, next) {
         try {
@@ -43,8 +28,8 @@ class ResultController {
             if (!id) {
                 res.status(400).json({message: "Id не указан"});
             }
-            const result = await Result.destroy({
-                where: { userId: id }
+            const result = await CathResult.destroy({
+                where: { id: id }
               });
             return res.json(result);
         } catch(e) {
@@ -59,7 +44,7 @@ class ResultController {
             if (!result.id) {
                 res.status(400).json( {message: 'Id не указан'});
             }
-            const updatedResult = await Result.update(result, {
+            const updatedResult = await CathResult.update(result, {
                 where: {id: id},
             })
             
@@ -73,8 +58,8 @@ class ResultController {
     async getOne(req, res, next) {
        try {
         const {id} = req.params;
-        const result = await Result.findOne({
-            where: {userId: id}
+        const result = await CathResult.findAll({
+            where: {cathedraId: id}
         })
         return res.json(result);
        } catch(e) {
@@ -83,6 +68,19 @@ class ResultController {
     }
       }
 
+      async getOneOwn(req, res, next) {
+        try {
+         const {id} = req.params;
+         const result = await CathResult.findOne({
+             where: {id: id}
+         })
+         return res.json(result);
+        } catch(e) {
+             
+         next(ApiError.badRequest(e.message));
+     }
+       }
+
 }
 
-module.exports = new ResultController();
+module.exports = new CathResultController();

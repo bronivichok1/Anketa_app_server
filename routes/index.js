@@ -11,7 +11,10 @@ const massivLocalRouter = require('./massivLocalRouter');
 const reportLocalRouter = require('./reportLocalRouter');
 const facultyRouter = require('./facultyRouter');
 const cath_typeRouter = require('./cath_typeRouter');
-
+const cathResultRouter = require('./cathResultRouter');
+const cathReportRouter = require('./cathReportRouter');
+const colvoSelectsRouter = require('./colvoSelectsRouter');
+const ratingRouter = require('./ratingRouter');
 
 router.use('/user', userRouter);
 router.use('/item', itemRouter);
@@ -24,6 +27,9 @@ router.use('/massivLocal', massivLocalRouter);
 router.use('/reportLocal', reportLocalRouter);
 router.use('/faculty', facultyRouter);
 router.use('/cath_type', cath_typeRouter);
-
+router.use('/cathResult', cathResultRouter);
+router.use('/cathReport', cathReportRouter);
+router.use('/colvo', colvoSelectsRouter);
+router.use('/rating', ratingRouter);
 
 module.exports = router;

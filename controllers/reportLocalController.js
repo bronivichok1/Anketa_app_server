@@ -70,6 +70,21 @@ class ReportLocalController {
         return res.json(report);
       }
 
+      async deleteOne(req, res, next) {
+        try {
+            const {id} = req.params;
+            if (!id) {
+                res.status(400).json({message: "Id не указан"});
+            }
+            const report = await ReportLocal.destroy({
+                where: { id: id }
+              });
+            return res.json(report);
+        } catch(e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
+
 
 }
 

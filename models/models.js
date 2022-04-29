@@ -112,6 +112,13 @@ const ColvoSelects = sequelize.define('colvo_selects', {
     cath_result_id : {type: DataTypes.INTEGER},
 })
 
+const RatingTables = sequelize.define('rating_tables', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+    formula: {type: DataTypes.STRING},
+    active: {type: DataTypes.BOOLEAN, defaultValue: true},
+})
+
 
 
 Cathedra.hasMany(User);
@@ -149,5 +156,6 @@ module.exports = {
     Cath_type,
     CathResult,
     CathReport,
-    ColvoSelects
+    ColvoSelects,
+    RatingTables
 }

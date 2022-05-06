@@ -1,16 +1,28 @@
 const ApiError = require('../error/ApiError');
-const { Result } = require('../models/models');
+const { Result, Dates } = require('../models/models');
+var moment = require('moment'); 
+moment().format(); 
 
 class ResultController {
     
     async create(req, res, next) {
         try {
             const {result, userId, cathedra_id } = req.body;
-            const candidate = await Result.findOne({ where: { userId } });
-            if (candidate) {
-              return next(ApiError.badRequest("Ваша анкета уже добавлена!"));
+
+            let dates = await Dates.findAll();
+
+            dates = dates[0];
+
+            const candidate = await Result.findAll({ where: { userId } });
+            if (candidate && candidate.length) {
+
+              candidate.forEach(el => {
+                if(moment(el.createdAt).isBetween(dates.firstDate, dates.lastDate, undefined, '[]')) {
+                  return next(ApiError.badRequest("Ваша анкета уже добавлена!"));
+                }
+              })
             }
-            const resultt = await Result.create({result, userId, cathedra_id});
+            const resultt = await Result.create({result: Number(result).toFixed(2), userId, cathedra_id});
             return res.json(resultt);
          } catch (e) {
              next(ApiError.badRequest(e.message));

@@ -8,5 +8,6 @@ router.delete('/:id', cathResultController.delete);
 router.put('/:id', cathResultController.update);
 router.get('/:id', cathResultController.getOne);
 router.get('/own/:id', cathResultController.getOneOwn);
+router.get('/active/:id', cathResultController.getResActive);
 
 module.exports = router;

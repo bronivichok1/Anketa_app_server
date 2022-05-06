@@ -23,6 +23,7 @@ class RatingTablesController {
     }
 
     async getTrue(req, res) {
+       try {
         const tables = await RatingTables.findAll({
             where: {active: true},
             order: [
@@ -30,6 +31,9 @@ class RatingTablesController {
             ]
           });
         return res.json(tables);
+       } catch(e) {
+        next(ApiError.badRequest(e.message));
+       }
     }
 
 

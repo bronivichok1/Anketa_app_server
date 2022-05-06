@@ -8,6 +8,6 @@ router.get('/', ratingTablesController.get);
 router.delete('/:id', ratingTablesController.delete);
 router.put('/:id', ratingTablesController.update);
 router.get('/:id', ratingTablesController.getOne);
-router.get('/truee/', ratingTablesController.getTrue);
+router.post('/truee', ratingTablesController.getTrue);
 
 module.exports = router;

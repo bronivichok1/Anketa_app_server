@@ -46,6 +46,21 @@ class ColvoSelectsController {
         }
     }
 
+    async deleteByRes(req, res, next) {
+        try {
+            const {id} = req.params;
+            if (!id) {
+                res.status(400).json({message: "Id не указан"});
+            }
+            const select_name = await ColvoSelects.destroy({
+                where: { cath_result_id: id }
+              });
+            return res.json(select_name);
+        } catch(e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
+
     async update(req, res, next) {
         try {
             const id = req.params.id;

@@ -1,5 +1,7 @@
 const ApiError = require('../error/ApiError');
-const { CathReport, Report, Result, CathResult, Select_name, ColvoSelects, Item } = require('../models/models');
+const { CathReport, Report, Result, CathResult, Select_name, ColvoSelects, Item, Dates } = require('../models/models');
+var moment = require('moment'); 
+moment().format(); 
 
 class CathReportController {
     
@@ -17,9 +19,21 @@ class CathReportController {
         try {
             const {cathedra_id} = req.body;
 
-            const candidate = await Report.findAll({ where: { cathedra_id } });
+            let dates = await Dates.findAll();
+ 
+            dates = dates[0];
 
             const resCand = await Result.findAll({ where: { cathedra_id } });
+
+            if(resCand && resCand.length) {
+              resCand.filter(r => moment(r.createdAt).isBetween(dates.firstDate, dates.lastDate, undefined, '[]'))
+            }
+
+            const candidate = await Report.findAll({ where: { cathedra_id } });
+
+            if(candidate && candidate.length) {
+              candidate.filter(r => moment(r.createdAt).isBetween(dates.firstDate, dates.lastDate, undefined, '[]'))
+            }
 
             const item = await Item.findOne({ where: {name: 'Количество занимаемых ставок'} })
 
@@ -101,6 +115,99 @@ class CathReportController {
          }
     }
 
+  //   async countUpdate(req, res, next) {
+  //     try {
+  //         const {cathedra_id} = req.body;
+
+  //         const candidate = await Report.findAll({ where: { cathedra_id } });
+
+  //         const resCand = await Result.findAll({ where: { cathedra_id } });
+
+  //         const item = await Item.findOne({ where: {name: 'Количество занимаемых ставок'} })
+
+  //         let resultt;
+
+  //         if(resCand && resCand.length) {
+  //             let res = 0;
+  //             resCand.forEach((r) => {
+  //               res += Number(r.result ? r.result : 0);
+  //             });
+
+  //           const condRes = await CathResult.findOne({where: {cathedraId: cathedra_id}});
+
+  //           if(condRes) {
+  //             resultt = await CathResult.update({result: res, cathedraId: cathedra_id}, 
+  //               {where: {id: condRes.id}});
+  //           }
+
+  //         }
+
+  //         const obj = {};
+  //         const arr = [];
+
+  //         if(candidate && candidate.length) {
+  //             candidate.forEach( el => {
+  //                 if (obj.hasOwnProperty(el.itemId)) {
+  //                     obj[el.itemId] = [...obj[el.itemId], el]
+  //                 } else {
+  //                  obj[el.itemId] = [el]
+  //                 }
+  //              })
+
+  //            for (let key in obj) {
+  //            let value = 0;
+  //            let ball_value = 0;
+  //            let colvo = 0;
+  //            let selectvalue = [];
+  //            let stavka = 0;
+
+  //            if(key == item.id) {
+  //             await obj[key].forEach(k => {
+  //                 stavka += k.selectvalue ? Number(k.selectvalue) : 0;
+  //                 value += k.value ? Number(k.value) : 0;
+  //                 ball_value += k.ball_value ? Number(k.ball_value) : 0;
+  //                 colvo += k.ball_value ? 1 : 0;
+  //                 selectvalue.push(k.selectvalue);
+  //                })
+  //            } else {
+  //             await obj[key].forEach(k => {
+  //                 value += k.value ? Number(k.value) : 0;
+  //                 ball_value += k.ball_value ? Number(k.ball_value) : 0;
+  //                 colvo += k.ball_value ? 1 : 0;
+  //                 selectvalue.push(k.selectvalue);
+  //                })
+  //            }
+          
+  //         arr.push({selectvalue: selectvalue, itemId: Number(key) });
+  //         console.log(stavka);
+
+  //         if(key == item.id) {
+  //             const report = await CathReport.create({value: value, ball_value: ball_value, cathedraId: cathedra_id, itemId: Number(key), colvo: colvo, selectvalue: stavka.toString(), cath_result_id: resultt.id })
+  //         } else {
+  //             const report = await CathReport.create({value: value, ball_value: ball_value, cathedraId: cathedra_id, itemId: Number(key), colvo: colvo, cath_result_id: resultt.id })
+  //         }
+         
+  //         }
+
+  //         arr.forEach(el => {
+  //             el.selectvalue.forEach(async el2 => {
+  //                 if(el2) {
+  //                     const select = await Select_name.findOne({ where: { name: el2, itemId: el.itemId } });
+  //                     if (select) {
+  //                         const colvoSel = await ColvoSelects.create({select_namesId: select.id, cathedra_id, cath_result_id: resultt.id})
+  //                     }
+  //                 }
+  //             })
+  //         })
+
+  //         }
+        
+  //         return res.json(resultt);
+  //      } catch (e) {
+  //          next(ApiError.badRequest(e.message));
+  //      }
+  // }
+
     async get(req, res, next) {
         try {
           const { id } = req.params;
@@ -161,6 +268,22 @@ class CathReportController {
             next(ApiError.badRequest(e.message));
         }
     }
+
+    async deleteByRes(req, res, next) {
+      try {
+          const {id} = req.params;
+          if (!id) {
+              res.status(400).json({message: "Id не указан"});
+          }
+          const report = await CathReport.destroy({
+              where: { cath_result_id: id }
+            });
+          return res.json(report);
+      } catch(e) {
+          next(ApiError.badRequest(e.message));
+      }
+  }
+
 
     async update(req, res, next) {
         try {

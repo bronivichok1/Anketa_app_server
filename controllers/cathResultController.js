@@ -1,15 +1,17 @@
 const ApiError = require('../error/ApiError');
-const { CathResult } = require('../models/models');
+const { CathResult, Dates } = require('../models/models');
+var moment = require('moment'); 
+moment().format(); 
 
 class CathResultController {
     
     async create(req, res, next) {
         try {
             const {result, cathedraId } = req.body;
-            const candidate = await CathResult.findOne({ where: { cathedraId } });
-            if (candidate) {
-              return next(ApiError.badRequest("Ваш отчёт уже добавлен!"));
-            }
+            // const candidate = await CathResult.findOne({ where: { cathedraId } });
+            // if (candidate) {
+            //   return next(ApiError.badRequest("Ваш отчёт уже добавлен!"));
+            // }
             const resultt = await CathResult.create({result, cathedraId});
             return res.json(resultt);
          } catch (e) {
@@ -58,15 +60,38 @@ class CathResultController {
     async getOne(req, res, next) {
        try {
         const {id} = req.params;
+
         const result = await CathResult.findAll({
             where: {cathedraId: id}
         })
+
         return res.json(result);
        } catch(e) {
             
         next(ApiError.badRequest(e.message));
     }
       }
+
+      async getResActive(req, res, next) {
+        try {
+         const {id} = req.params;
+ 
+         let dates = await Dates.findAll();
+ 
+         dates = dates[0];
+ 
+         const result = await CathResult.findAll({
+             where: {cathedraId: id}
+         })
+ 
+         result.filter(r => moment(r.createdAt).isBetween(dates.firstDate, dates.lastDate, undefined, '[]'))
+ 
+         return res.json(result);
+        } catch(e) {
+             
+         next(ApiError.badRequest(e.message));
+     }
+       }
 
       async getOneOwn(req, res, next) {
         try {

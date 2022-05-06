@@ -21,6 +21,7 @@ class RatingController {
             const itemAgeId = await Item.findOne({ where: { name: 'Возраст' } });
 
             const stavkaO = await CathReport.findOne({ where: { cathedraId: cathId, itemId: itemStavkaId.id } });
+            //console.log(stavkaO)
             const uchWorkO = await CathReport.findOne({ where: { cathedraId: cathId, itemId: itemUchWorkId.id } });
             const uchMetWorkO = await CathReport.findOne({ where: { cathedraId: cathId, itemId: itemUchMetWorkId.id } });
  
@@ -45,7 +46,7 @@ class RatingController {
                 arr.push(obj);
             }
 
-            console.log(arr)
+            //console.log(arr)
            }
 
            return res.json(arr);

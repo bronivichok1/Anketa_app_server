@@ -11,5 +11,6 @@ router.delete('/one/:id', cathReportController.deleteOne);
 router.post('/count', cathReportController.count);
 router.get('/result/:id', cathReportController.getByResult);
 router.get('/stav/:id', cathReportController.getStavka);
+router.delete('/res/:id', cathReportController.deleteByRes);
 
 module.exports = router;

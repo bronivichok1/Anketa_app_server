@@ -9,5 +9,6 @@ router.delete('/:id', colvoSelectsController.delete);
 router.put('/:id', colvoSelectsController.update);
 router.post('/find', colvoSelectsController.getAll);
 router.get('/:id', colvoSelectsController.getOne);
+router.delete('/res/:id', colvoSelectsController.deleteByRes);
 
 module.exports = router;

@@ -119,6 +119,12 @@ const RatingTables = sequelize.define('rating_tables', {
     active: {type: DataTypes.BOOLEAN, defaultValue: true},
 })
 
+const Dates = sequelize.define('dates', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    firstDate: {type: DataTypes.STRING, allowNull: false},
+    lastDate: {type: DataTypes.STRING, allowNull: false},
+})
+
 
 
 Cathedra.hasMany(User);
@@ -157,5 +163,6 @@ module.exports = {
     CathResult,
     CathReport,
     ColvoSelects,
-    RatingTables
+    RatingTables,
+    Dates
 }

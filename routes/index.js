@@ -16,6 +16,7 @@ const cathReportRouter = require('./cathReportRouter');
 const colvoSelectsRouter = require('./colvoSelectsRouter');
 const ratingRouter = require('./ratingRouter');
 const ratingTablesRouter = require('./ratingTablesRouter');
+const datesRouter = require('./datesRouter');
 
 router.use('/user', userRouter);
 router.use('/item', itemRouter);
@@ -33,5 +34,6 @@ router.use('/cathReport', cathReportRouter);
 router.use('/colvo', colvoSelectsRouter);
 router.use('/rating', ratingRouter);
 router.use('/ratingTables', ratingTablesRouter);
+router.use('/dates', datesRouter);
 
 module.exports = router;

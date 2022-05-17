@@ -28,6 +28,21 @@ class ReportController {
         }
       }
 
+      async getByRes(req, res, next) {
+        try {
+          const { id } = req.params;
+          if (!id) {
+            res.status(400).json({ message: "Id не указан" });
+          }
+          const reports = await Report.findAll({
+            where: { resultId: id },
+          });
+          return res.json(reports);
+        } catch (e) {
+          next(ApiError.badRequest(e.message));
+        }
+      }
+
       async getByCath(req, res, next) {
         try {
           const { id } = req.params;
@@ -57,6 +72,22 @@ class ReportController {
             next(ApiError.badRequest(e.message));
         }
     }
+
+    async deleteByRes(req, res, next) {
+      try {
+          const {id} = req.params;
+          if (!id) {
+              res.status(400).json({message: "Id не указан"});
+          }
+          const report = await Report.destroy({
+              where: { resultId: id }
+            });
+          return res.json(report);
+      } catch(e) {
+          next(ApiError.badRequest(e.message));
+      }
+  }
+
 
     async update(req, res, next) {
         try {

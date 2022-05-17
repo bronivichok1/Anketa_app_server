@@ -4,8 +4,8 @@ const { Massiv } = require("../models/models");
 class MassivController {
   async create(req, res, next) {
     try {
-      const { value, userId, itemId } = req.body;
-      const massiv = await Massiv.create({ value, userId, itemId });
+      const { value, userId, itemId, result_id } = req.body;
+      const massiv = await Massiv.create({ value, userId, itemId, result_id });
       return res.json(massiv);
     } catch (e) {
       next(ApiError.badRequest(e.message));
@@ -20,6 +20,21 @@ class MassivController {
       }
       const massivs = await Massiv.findAll({
         where: { userId: id },
+      });
+      return res.json(massivs);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+
+  async getByRes(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        res.status(400).json({ message: "Id не указан" });
+      }
+      const massivs = await Massiv.findAll({
+        where: { result_id: id },
       });
       return res.json(massivs);
     } catch (e) {
@@ -59,6 +74,22 @@ class MassivController {
       next(ApiError.badRequest(e.message));
     }
   }
+
+  async deleteByRes(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!id) {
+        res.status(400).json({ message: "Id не указан" });
+      }
+      const massiv = await Massiv.destroy({
+        where: { result_id: id },
+      });
+      return res.json(massiv);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+
 
   async ownDelete(req, res, next) {
     try {

@@ -9,5 +9,7 @@ router.put('/:id', reportController.update);
 router.get('/stavka/:id', reportController.getOne);
 router.delete('/one/:id', reportController.deleteOne);
 router.get('/cath/:id', reportController.getByCath);
+router.get('/res/:id', reportController.getByRes);
+router.delete('/ress/:id', reportController.deleteByRes);
 
 module.exports = router;

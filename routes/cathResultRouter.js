@@ -9,5 +9,6 @@ router.put('/:id', cathResultController.update);
 router.get('/:id', cathResultController.getOne);
 router.get('/own/:id', cathResultController.getOneOwn);
 router.get('/active/:id', cathResultController.getResActive);
+router.post('/count', cathResultController.countRes);
 
 module.exports = router;

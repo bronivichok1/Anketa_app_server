@@ -15,13 +15,14 @@ const Cathedra = sequelize.define('cathedra', {
     faculty_id: {type: DataTypes.INTEGER},
     clin_or_teor: {type: DataTypes.STRING},
     cath_type_id: {type: DataTypes.INTEGER},
+    user_id: {type: DataTypes.INTEGER},
 })
 
 const Item = sequelize.define('item', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
-    name: {type: DataTypes.STRING, unique: true, allowNull: false},
+    name: {type: DataTypes.STRING, allowNull: false},
     num: {type: DataTypes.STRING, unique: true},
-    ball: {type: DataTypes.INTEGER},
+    ball: {type: DataTypes.INTEGER}, //Numeric
     help: {type: DataTypes.STRING},
     formula: {type: DataTypes.STRING},
     type: {type: DataTypes.STRING},
@@ -50,7 +51,9 @@ const Result = sequelize.define('result', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     result: {type: DataTypes.INTEGER}, //Numeric
     userId: {type: DataTypes.INTEGER},
-    cathedra_id: {type: DataTypes.INTEGER}
+    cathedra_id: {type: DataTypes.INTEGER},
+    cath_result_id: {type: DataTypes.INTEGER}
+
 })
 
 const Massiv = sequelize.define('massiv', {
@@ -58,6 +61,7 @@ const Massiv = sequelize.define('massiv', {
     value: {type: DataTypes.INTEGER},
     userId: {type: DataTypes.INTEGER},
     itemId: {type: DataTypes.INTEGER},
+    result_id: {type: DataTypes.INTEGER}
 })
 
 const ReportLocal = sequelize.define('reportlocal', {

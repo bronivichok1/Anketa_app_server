@@ -13,17 +13,20 @@ class ResultController {
 
             dates = dates[0];
 
-            const candidate = await Result.findAll({ where: { userId } });
+            let candidate = await Result.findAll({ where: { userId } });
             if (candidate && candidate.length) {
 
-              candidate.forEach(el => {
-                if(moment(el.createdAt).isBetween(dates.firstDate, dates.lastDate, undefined, '[]')) {
-                  return next(ApiError.badRequest("Ваша анкета уже добавлена!"));
-                }
-              })
+              candidate = candidate.filter(r => moment(r.createdAt).isBetween(dates.firstDate, dates.lastDate, undefined, '[]'));
+            } 
+
+            if (candidate && candidate.length) {
+              return next(ApiError.badRequest(`Ваша анкета за период с ${moment(dates.firstDate).format("DD.MM.YYYY")} по ${moment(dates.lastDate).format("DD.MM.YYYY")} уже существует!`));
+            } else {
+              const resultt = await Result.create({result: Number(result).toFixed(2), userId, cathedra_id});
+              return res.json(resultt);
             }
-            const resultt = await Result.create({result: Number(result).toFixed(2), userId, cathedra_id});
-            return res.json(resultt);
+            
+            
          } catch (e) {
              next(ApiError.badRequest(e.message));
          }
@@ -64,6 +67,21 @@ class ResultController {
         }
     }
 
+    async deleteOwn(req, res, next) {
+      try {
+          const {id} = req.params;
+          if (!id) {
+              res.status(400).json({message: "Id не указан"});
+          }
+          const result = await Result.destroy({
+              where: { id: id }
+            });
+          return res.json(result);
+      } catch(e) {
+          next(ApiError.badRequest(e.message));
+      }
+  }
+
     async update(req, res, next) {
         try {
             const id = req.params.id;
@@ -94,6 +112,19 @@ class ResultController {
         next(ApiError.badRequest(e.message));
     }
       }
+
+      async getOneOwn(req, res, next) {
+        try {
+         const {id} = req.params;
+         const result = await Result.findOne({
+             where: {id: id}
+         })
+         return res.json(result);
+        } catch(e) {
+             
+         next(ApiError.badRequest(e.message));
+     }
+       }
 
 }
 

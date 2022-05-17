@@ -1,6 +1,68 @@
 const ApiError = require("../error/ApiError");
 const { Item } = require("../models/models");
 
+function createTree(arr) {
+  if (!arr || !arr.length) { return []; }
+  var tree = [], map = new Map();
+  for (var i = 0, len = arr.length; i < len; ++i) {
+    var item = arr[i];
+    var mapItem = map.get(item.id);
+    if (!mapItem || Array.isArray(mapItem)) {
+      if (mapItem) {
+        item.children = mapItem;
+      }
+      map.set(item.id, item);
+    }
+    if (item.parentId == null) {
+      tree.push(item);
+    } else {
+      var parentItem = map.get(item.parentId);
+      if (!parentItem) {
+        map.set(item.parentId, [item]);
+      } else {
+        var children = Array.isArray(parentItem) ?
+          parentItem :
+          (parentItem.children = parentItem.children || []);
+        children.push(item);
+      }
+    }
+  }
+  return tree;
+}
+
+function sortTree(arr) {
+
+  arr.sort((a, b) => a.order - b.order);
+
+  arr.forEach(el => {
+    if (el.children && el.children.length) {
+      sortTree(el.children);
+    }
+  })
+
+  return arr;
+}
+
+function getSortedArr(arr) {
+
+  let newArr = [];
+
+  arr.forEach(el => {
+    newArr.push(el.num);
+
+    if(el.children && el.children.length) {
+      const testArr = getSortedArr(el.children);
+
+      newArr = [...newArr, ...testArr];
+    }
+  })
+
+  return newArr;
+
+}
+
+
+
 class ItemController {
   async create(req, res, next) {
     try {
@@ -36,12 +98,34 @@ class ItemController {
   }
 
   async get(req, res) {
+
+    const resultArr = [];
     const items = await Item.findAll({
       order: [
         ['num'],
     ]
     });
-    return res.json(items);
+
+    items.forEach(item => {
+      item.order = Number(item.num.split('.')[item.num.split('.').length - 1]);
+    })
+  
+    const arr = createTree(items);
+
+    await sortTree(arr);
+
+    const newArr = getSortedArr(arr);
+    const newItems = await Item.findAll();
+
+    newArr.forEach( el => {
+       const item = newItems.find(i => i.num === el);
+
+      if(item) {
+        resultArr.push(item);
+      }
+    })
+    
+    return res.json(resultArr);
   }
 
   async delete(req, res, next) {

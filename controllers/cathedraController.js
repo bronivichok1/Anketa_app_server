@@ -5,8 +5,8 @@ class CathedraController {
     
     async create(req, res, next) {
         try {
-           const {name, user_name, faculty_id, clin_or_teor, cath_type_id} = req.body;
-           const cathedra = await Cathedra.create({name, user_name, faculty_id, clin_or_teor, cath_type_id});
+           const {name, user_name, faculty_id, clin_or_teor, cath_type_id, user_id} = req.body;
+           const cathedra = await Cathedra.create({name, user_name, faculty_id, clin_or_teor, cath_type_id, user_id});
            return res.json(cathedra);
         } catch (e) {
             next(ApiError.badRequest(e.message));
@@ -14,7 +14,11 @@ class CathedraController {
     }
 
     async get(req, res) {
-        const cathedras = await Cathedra.findAll();
+        const cathedras = await Cathedra.findAll({
+            order: [
+              ['id'],
+          ]
+          });
         return res.json(cathedras);
     }
 

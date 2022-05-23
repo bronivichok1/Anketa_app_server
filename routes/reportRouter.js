@@ -11,5 +11,7 @@ router.delete('/one/:id', reportController.deleteOne);
 router.get('/cath/:id', reportController.getByCath);
 router.get('/res/:id', reportController.getByRes);
 router.delete('/ress/:id', reportController.deleteByRes);
+router.post('/post', reportController.postAnketa);
+router.post('/update', reportController.updateAnketa);
 
 module.exports = router;

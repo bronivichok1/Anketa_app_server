@@ -12,5 +12,7 @@ router.post('/count', cathReportController.count);
 router.get('/result/:id', cathReportController.getByResult);
 router.get('/stav/:id', cathReportController.getStavka);
 router.delete('/res/:id', cathReportController.deleteByRes);
+router.post('/countReps', cathReportController.countCathReps);
+router.post('/update', cathReportController.updateCathReport);
 
 module.exports = router;

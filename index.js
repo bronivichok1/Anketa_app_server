@@ -13,13 +13,12 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({limit: '1024mb', parameterLimit: 10000000, extended: true }));
 app.use('/api', router);
 
 app.use(errorHandler);
 
 //create excel
-
 
 app.post("/api/excel", (req, res) => {
   const data = req.body;
@@ -50,7 +49,9 @@ const start = async () => {
     try {
         await sequelize.authenticate();
         await sequelize.sync();
-        app.listen(PORT, '127.0.0.1', () => console.log(`Server started on port ${PORT}`));
+        app.listen(PORT, 
+          '127.0.0.1', 
+          () => console.log(`Server started on port ${PORT}`));
     } catch (e) {
         console.log(e);
     }

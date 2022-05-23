@@ -241,6 +241,57 @@ class CathReportController {
         }
     }
 
+    async countCathReps(req, res, next) {
+      try {
+          const {items, reports} = req.body;
+
+        await reports.map((el) => {
+            items.forEach(i => {
+              if( i.id === el.itemId) {
+                i.vvod = el.value;
+                i.value = el.ball_value;
+                i.colvo = el.colvo;
+              }
+            })
+          });
+          
+          return res.json(items);
+       } catch (e) {
+           next(ApiError.badRequest(e.message));
+       }
+  }
+
+  async updateCathReport(req, res, next) {
+    try {
+        const {itemItems, CathReportReports, itemStavka} = req.body;
+       
+        const itemId = await itemItems.find(i => i.name === 'Количество занимаемых ставок').id;
+
+      if(itemId) {
+          const el = await CathReportReports.find(c => c.itemId === itemId);
+          if(el) {
+            const updatedReport = await CathReport.update({...el, selectvalue: itemStavka}, {
+              where: {id: el.id},
+          })
+          }
+      }
+
+     await CathReportReports.forEach(async rep => {
+        const itemm = await itemItems.find(i => i.id === rep.itemId);
+
+        if (itemm) {
+          const updatedReport = await CathReport.update({...rep, colvo: itemm.colvo}, {
+            where: {id: rep.id},
+        })
+        }
+      })
+
+
+        return res.json('ok');
+     } catch (e) {
+         next(ApiError.badRequest(e.message));
+     }
+}
 
 }
 

@@ -7,5 +7,8 @@ router.get('/', itemController.get);
 router.get('/:id', itemController.getOne);
 router.delete('/:id', itemController.delete);
 router.put('/:id', itemController.update);
+router.post('/test', itemController.test);
+router.post('/res', itemController.countRes);
+router.post('/close', itemController.closeItems);
 
 module.exports = router;

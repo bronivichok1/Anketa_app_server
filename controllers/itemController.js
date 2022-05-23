@@ -61,6 +61,18 @@ function getSortedArr(arr) {
 
 }
 
+async function childFunc (arr) {
+ await arr.forEach((el) => {
+    arr.forEach((el2) => {
+      if (el.id === el2.parentId) {
+         el.children = el.children ? [...el.children, el2] : [el2];
+      }
+    });
+  });
+
+  return arr;
+}
+
 
 
 class ItemController {
@@ -99,7 +111,7 @@ class ItemController {
 
   async get(req, res) {
 
-    const resultArr = [];
+    let resultArr = [];
     const items = await Item.findAll({
       order: [
         ['num'],
@@ -166,6 +178,77 @@ class ItemController {
         where: {id}
     })
     return res.json(item);
+  }
+
+  async test(req, res, next) {
+    try {
+      const {items} = req.body;
+    
+      await items.forEach(async (el) => {
+      if(el.type === 'Сумма' && el.children && el.children.length && el.parentId === null) {
+       let res = 0;
+       let num = el.num;
+ 
+       await items.forEach( child => {
+         if(child.num.split('.')[0] === num.split('.')[0] && child.num.split('.').length > num.split('.').length ) {
+          res += Number(child.value ? child.value : 0);
+         }
+       })
+    
+        el.value = Number(res.toFixed(2));
+      }
+     });
+
+      return res.json(items);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+
+  async countRes(req, res, next) {
+    try {
+      const {items} = req.body;
+    
+      let rest = 0;
+     await items.forEach((el) => {
+      if(el.type !== 'Сумма') {
+        rest += Number(el.value ? el.value : 0);
+      }
+      });
+
+      return res.json(rest);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+
+  async closeItems(req, res, next) {
+    try {
+      const {items} = req.body;
+
+     await items.forEach((el) => {
+      items.forEach( (el2) => {
+
+        let n = el2.num.split('.');
+        n.pop();
+        n = n.join('.')
+
+        if (
+          !el.clas &&
+          el.num === n &&
+          el2.num.split(".").length === el.num.split(".").length + 1 &&
+          el2.clas
+        ) {
+          el2.clas = false;
+          el.clasName = false;
+        }
+      });
+    });
+
+      return res.json(items);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   }
 }
 

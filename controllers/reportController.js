@@ -136,8 +136,21 @@ class ReportController {
     async postAnketa(req, res, next) {
       try {
           const {userId, itemSym, items, massivLocal, localUser} = req.body;
-         
-          const rest = await Result.create({ userId: userId, result: itemSym, cathedra_id: localUser.cathedraId });
+
+          let dates = await Dates.findAll();
+ 
+          dates = dates[0];
+
+          let candidate = await Result.findAll({ where: { userId } });
+
+          if (candidate && candidate.length) {
+            candidate = candidate.filter(r => moment(r.createdAt).isBetween(dates.firstDate, dates.lastDate, undefined, '[]'));
+          } 
+
+          if (candidate && candidate.length) {
+            return next(ApiError.badRequest(`Ваша анкета за период с ${moment(dates.firstDate).format("DD.MM.YYYY")} по ${moment(dates.lastDate).format("DD.MM.YYYY")} уже существует!`));
+          } else {
+            const rest = await Result.create({ userId: userId, result: itemSym, cathedra_id: localUser.cathedraId });
 
           await items.forEach(async (d) => {
 
@@ -180,10 +193,6 @@ class ReportController {
           const massiv = await MassivLocal.destroy({
             where: { userId: userId },
           });
-
-          let dates = await Dates.findAll();
- 
-          dates = dates[0];
   
           let result = await CathResult.findAll({
               where: {cathedraId: localUser.cathedraId}
@@ -210,6 +219,7 @@ class ReportController {
           }
 
           return res.json('ok');
+          }
        } catch (e) {
            next(ApiError.badRequest(e.message));
        }

@@ -129,6 +129,29 @@ const Dates = sequelize.define('dates', {
     lastDate: {type: DataTypes.STRING, allowNull: false},
 })
 
+const Books = sequelize.define('books', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    type: {type: DataTypes.STRING, allowNull: false},
+    name: {type: DataTypes.STRING, allowNull: false},
+    protocol_num: {type: DataTypes.STRING},
+    magaz_or_collection: {type: DataTypes.STRING},
+    database: {type: DataTypes.STRING},
+    colvo_authors : {type: DataTypes.INTEGER},
+    item_id : {type: DataTypes.INTEGER},
+    book_report_id : {type: DataTypes.INTEGER},
+})
+
+const Authors = sequelize.define('authors', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+    books_id : {type: DataTypes.INTEGER},
+})
+
+const Book_Report = sequelize.define('book_report', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    cathedra_id : {type: DataTypes.INTEGER},
+})
+
 
 
 Cathedra.hasMany(User);
@@ -168,5 +191,8 @@ module.exports = {
     CathReport,
     ColvoSelects,
     RatingTables,
-    Dates
+    Dates,
+    Books,
+    Authors,
+    Book_Report
 }

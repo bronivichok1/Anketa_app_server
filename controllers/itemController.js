@@ -250,6 +250,17 @@ class ItemController {
       next(ApiError.badRequest(e.message));
     }
   }
+
+  async getMassivItems(req, res) {
+    try {
+      const items = await Item.findAll({
+        where: {type: 'Массив данных'}
+    })
+    return res.json(items);
+    } catch(e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
 }
 
 

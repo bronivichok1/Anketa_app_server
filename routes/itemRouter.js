@@ -10,5 +10,6 @@ router.put('/:id', itemController.update);
 router.post('/test', itemController.test);
 router.post('/res', itemController.countRes);
 router.post('/close', itemController.closeItems);
+router.post('/massiv', itemController.getMassivItems);
 
 module.exports = router;

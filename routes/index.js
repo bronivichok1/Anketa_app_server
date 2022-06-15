@@ -17,6 +17,9 @@ const colvoSelectsRouter = require('./colvoSelectsRouter');
 const ratingRouter = require('./ratingRouter');
 const ratingTablesRouter = require('./ratingTablesRouter');
 const datesRouter = require('./datesRouter');
+const bookRouter = require('./bookRouter');
+const authorsRouter = require('./authorsRouter');
+const bookReportRouter = require('./bookReportRouter');
 
 router.use('/user', userRouter);
 router.use('/item', itemRouter);
@@ -35,5 +38,8 @@ router.use('/colvo', colvoSelectsRouter);
 router.use('/rating', ratingRouter);
 router.use('/ratingTables', ratingTablesRouter);
 router.use('/dates', datesRouter);
+router.use('/books', bookRouter);
+router.use('/authors', authorsRouter);
+router.use('/book_report', bookReportRouter);
 
 module.exports = router;

@@ -1,5 +1,5 @@
 const ApiError = require('../error/ApiError');
-const { Book_Report } = require('../models/models');
+const { Book_Report, Books, Authors } = require('../models/models');
 
 class BookReportController {
     
@@ -53,6 +53,25 @@ class BookReportController {
          }
       }
       
+      async createReport(req, res) {
+        try {
+            const {books, cathId} = req.body;
+
+            const bookReport = await Book_Report.create({cathedra_id: cathId});
+
+            books.forEach(async el => {
+                const book = await Books.create({name: el.name, type: el.type, item_id: el.item_id, protocol_num: el.protocol_num, magaz_or_collection: el.magaz_or_collection, database: el.database, colvo_authors: el.colvo_authors, book_report_id: bookReport.id});
+
+                el.authors.forEach(async authEl => {
+                    const auth = await Authors.create({name: authEl.author, books_id: book.id});
+                })
+            })
+          
+            return res.json(bookReport);
+         } catch (e) {
+             next(ApiError.badRequest(e.message));
+         }
+      }
 
 }
 

@@ -58,6 +58,29 @@ class BooksController {
         })
         return res.json(book);
       }
+
+    async getByReport(req, res) {
+        const {id} = req.params;
+        const books = await Books.findAll({
+            where: {book_report_id: id}
+        })
+        return res.json(books);
+    }
+
+    async deleteByReport(req, res, next) {
+        try {
+            const {id} = req.params;
+            if (!id) {
+                res.status(400).json({message: "Id не указан"});
+            }
+            const book = await Books.destroy({
+                where: { book_report_id: id }
+              });
+            return res.json(book);
+        } catch(e) {
+            next(ApiError.badRequest(e.message));
+        }
+    }
       
 
 }

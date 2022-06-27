@@ -136,6 +136,26 @@ class BookReportController {
          }
       }
 
+      async getBooks(req, res) {
+        try {
+            const {id} = req.params;
+            const booksReports = await Book_Report.findAll({
+                where: {cathedra_id: id}
+            })
+
+            const report = booksReports[booksReports.length - 1];
+
+            const books = await Books.findAll({
+                where: {book_report_id: report.id}
+            })
+
+            return res.json(books);
+         } catch (e) {
+             next(ApiError.badRequest(e.message));
+         }
+      }
+      
+
 }
 
 module.exports = new BookReportController();

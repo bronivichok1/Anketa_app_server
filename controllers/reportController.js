@@ -173,7 +173,8 @@ class ReportController {
                         value: el2.val,
                         userId: userId,
                         itemId: d.id,
-                        result_id: rest.id
+                        result_id: rest.id,
+                        name: el2.name
                       });
                     });
                   }
@@ -286,7 +287,7 @@ class ReportController {
             if(massivMassiv.find(sm => sm.id === mas.id)) {
               console.log('yes');
              } else {
-               const massiv = await Massiv.create({value: Number(mas.val), userId: localUser.id, itemId: itemId, result_id: itemResult.id});
+               const massiv = await Massiv.create({value: Number(mas.val), userId: localUser.id, itemId: itemId, result_id: itemResult.id, name: mas.name});
              }
           })
         }

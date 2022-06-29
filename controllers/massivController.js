@@ -4,8 +4,8 @@ const { Massiv } = require("../models/models");
 class MassivController {
   async create(req, res, next) {
     try {
-      const { value, userId, itemId, result_id } = req.body;
-      const massiv = await Massiv.create({ value, userId, itemId, result_id });
+      const { value, userId, itemId, result_id, name } = req.body;
+      const massiv = await Massiv.create({ value, userId, itemId, result_id, name });
       return res.json(massiv);
     } catch (e) {
       next(ApiError.badRequest(e.message));

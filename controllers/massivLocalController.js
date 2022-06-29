@@ -4,8 +4,8 @@ const { MassivLocal } = require("../models/models");
 class MassivLocalController {
   async create(req, res, next) {
     try {
-      const { value, userId, itemId } = req.body;
-      const massiv = await MassivLocal.create({ value, userId, itemId });
+      const { value, userId, itemId, name } = req.body;
+      const massiv = await MassivLocal.create({ value, userId, itemId, name });
       return res.json(massiv);
     } catch (e) {
       next(ApiError.badRequest(e.message));

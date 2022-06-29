@@ -1,5 +1,5 @@
 const ApiError = require('../error/ApiError');
-const { ReportLocal, Item, MassivLocal } = require('../models/models');
+const { ReportLocal, Item, MassivLocal, User } = require('../models/models');
 
 class ReportLocalController {
     
@@ -126,7 +126,7 @@ class ReportLocalController {
 
     async saveReports(req, res, next) {
         try {
-            const {items, reports, userId, itemMassivLocal, massivMassivLocal, massivDeletedLocal} = req.body;
+            const {items, reports, userId, itemMassivLocal, massivMassivLocal, massivDeletedLocal, localUser} = req.body;
             
             if(items.length > reports.length) {
                 const arr = [];
@@ -148,6 +148,10 @@ class ReportLocalController {
                   });
                 })
               }
+
+              const updatedUser = await User.update(localUser, {
+                where: {id: localUser.id},
+              })
               
               await reports.forEach(async rep => {
                 const cont = items.find(i => i.id === rep.itemId);
@@ -174,7 +178,7 @@ class ReportLocalController {
                     if(massivMassivLocal.find(sm => sm.id === mas.id)) {
                       console.log('yes');
                      } else {
-                       const massiv = await MassivLocal.create({value: Number(mas.val), userId: userId, itemId: itemId});
+                       const massiv = await MassivLocal.create({value: Number(mas.val), userId: userId, itemId: itemId, name: mas.name});
                      }
                   })
                 }

@@ -61,7 +61,8 @@ const Massiv = sequelize.define('massiv', {
     value: {type: DataTypes.INTEGER},
     userId: {type: DataTypes.INTEGER},
     itemId: {type: DataTypes.INTEGER},
-    result_id: {type: DataTypes.INTEGER}
+    result_id: {type: DataTypes.INTEGER},
+    name: {type: DataTypes.STRING(250)},
 })
 
 const ReportLocal = sequelize.define('reportlocal', {
@@ -78,6 +79,7 @@ const MassivLocal = sequelize.define('massivlocal', {
     value: {type: DataTypes.INTEGER},
     userId: {type: DataTypes.INTEGER},
     itemId: {type: DataTypes.INTEGER},
+    name: {type: DataTypes.STRING(250)},
 })
 
 const Faculty = sequelize.define('faculty', {

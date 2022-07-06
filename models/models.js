@@ -153,6 +153,7 @@ const Authors = sequelize.define('authors', {
 const Book_Report = sequelize.define('book_report', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     cathedra_id : {type: DataTypes.INTEGER},
+    cath_result_id: {type: DataTypes.INTEGER}
 })
 
 

@@ -1,5 +1,5 @@
 const ApiError = require('../error/ApiError');
-const { CathResult, Dates, CathReport, Result, Item, Report, Select_name, ColvoSelects } = require('../models/models');
+const { CathResult, Dates, CathReport, Result, Item, Report, Select_name, ColvoSelects, Book_Report, Books } = require('../models/models');
 var moment = require('moment'); 
 moment().format(); 
 
@@ -8,10 +8,6 @@ class CathResultController {
     async create(req, res, next) {
         try {
             const {result, cathedraId } = req.body;
-            // const candidate = await CathResult.findOne({ where: { cathedraId } });
-            // if (candidate) {
-            //   return next(ApiError.badRequest("Ваш отчёт уже добавлен!"));
-            // }
             const resultt = await CathResult.create({result, cathedraId});
             return res.json(resultt);
          } catch (e) {
@@ -37,6 +33,13 @@ class CathResultController {
 
                reports = [...reports, ...reps];
             })
+         }
+
+         const bookReport = await Book_Report.findOne({ where: { cath_result_id: cath_result_id } });
+         let books = [];
+
+         if (bookReport) {
+            books = await Books.findAll({ where: { book_report_id: bookReport.id } });
          }
 
          console.log(reports);
@@ -94,9 +97,18 @@ class CathResultController {
             arr.push({selectvalue: selectvalue, itemId: Number(key) });
             console.log(stavka);
 
+            let bookLength;
+
+            if (books.find(b => b.item_id === Number(key))) {
+              bookLength = books.filter(b => b.item_id === Number(key)).length;
+            }
+
             if(key == item.id) {
                 const report = await CathReport.create({value: value, ball_value: ball_value, cathedraId: cathResult.cathedraId, itemId: Number(key), colvo: colvo, selectvalue: stavka.toString(), cath_result_id: cathResult.id })
-            } else {
+            } else if (bookLength) {
+                const report = await CathReport.create({value: value, ball_value: ball_value, cathedraId: cathResult.cathedraId, itemId: Number(key), colvo: bookLength, cath_result_id: cathResult.id })
+            }
+            else {
                 const report = await CathReport.create({value: value, ball_value: ball_value, cathedraId: cathResult.cathedraId, itemId: Number(key), colvo: colvo, cath_result_id: cathResult.id })
             }
            

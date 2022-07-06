@@ -45,6 +45,33 @@ app.post("/api/excel", (req, res) => {
   });
 ///
 
+//create excel Book
+
+app.post("/api/excelBook", (req, res) => {
+  const data = req.body;
+  
+    var options = {
+      convertTo : 'xlsx' 
+    };
+  
+    carbone.render('./book.xlsx', data, options, function(err, result){
+      if (err) {
+        res.send(Promise.reject());
+        console.log(err);
+        
+      }
+      fs.writeFileSync('bookRes.xlsx', result);
+      res.send(Promise.resolve());
+      
+    });
+  
+  });
+  
+  app.get("/api/excelBookRes", (req, res) => {
+    res.sendFile(`${__dirname}/bookRes.xlsx`);
+  });
+///
+
 const start = async () => {
     try {
         await sequelize.authenticate();

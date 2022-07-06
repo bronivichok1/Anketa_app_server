@@ -5,8 +5,8 @@ class BookReportController {
     
     async create(req, res, next) {
         try {
-            const {cathedra_id} = req.body;
-            const book = await Book_Report.create({cathedra_id});
+            const {cathedra_id, cath_result_id} = req.body;
+            const book = await Book_Report.create({cathedra_id, cath_result_id});
             return res.json(book);
          } catch (e) {
              next(ApiError.badRequest(e.message));

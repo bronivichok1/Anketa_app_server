@@ -47,32 +47,80 @@ class RatingController {
 
             const cathReports = await CathReport.findAll({ where: {cath_result_id: cathRes.id}});
 
-            const stavkaO = cathReports.find(el => el.itemId === itemStavkaId.id);
-            const uchWorkO = cathReports.find(el => el.itemId === itemUchWorkId.id);
-            const uchMetWorkO = cathReports.find(el => el.itemId === itemUchMetWorkId.id);
-            const nauchWorkO = cathReports.find(el => el.itemId === itemNauchWorkId.id);
-            const vospitWorkO = cathReports.find(el => el.itemId === itemVospitWorkId.id);
-            const lechWorkO = cathReports.find(el => el.itemId === itemLechWorkId.id);
-            const mejWorkO = cathReports.find(el => el.itemId === itemMejWorkId.id);
-            const indXirshO = cathReports.find(el => el.itemId === itemIndXirshId.id);
-            const indXirshScopO = cathReports.find(el => el.itemId === itemIndXirshScopId.id);
-            const colvoScopO = cathReports.find(el => el.itemId === itemColvoScopId.id);
-            const colvoWoSO = cathReports.find(el => el.itemId === itemColvoWoSId.id);
-            const covidWorkO = cathReports.find(el => el.itemId === itemCovidWorkId.id);
+            let stavkaO;
+            if (itemStavkaId) {
+                stavkaO = cathReports.find(el => el.itemId === itemStavkaId.id);
+            }
+           // const stavkaO = cathReports.find(el => el.itemId === itemStavkaId.id);
+           let uchWorkO;
+           if (itemUchWorkId) {
+            uchWorkO = cathReports.find(el => el.itemId === itemUchWorkId.id);
+           }
+           // const uchWorkO = cathReports.find(el => el.itemId === itemUchWorkId.id);
+           let uchMetWorkO;
+           if (itemUchMetWorkId) {
+            uchMetWorkO = cathReports.find(el => el.itemId === itemUchMetWorkId.id);
+           }
+           // const uchMetWorkO = cathReports.find(el => el.itemId === itemUchMetWorkId.id);
+           let nauchWorkO;
+           if (itemNauchWorkId) {
+            nauchWorkO = cathReports.find(el => el.itemId === itemNauchWorkId.id);
+           }
+           // const nauchWorkO = cathReports.find(el => el.itemId === itemNauchWorkId.id);
+           let vospitWorkO;
+           if (itemVospitWorkId) {
+            vospitWorkO = cathReports.find(el => el.itemId === itemVospitWorkId.id);
+           }
+            //const vospitWorkO = cathReports.find(el => el.itemId === itemVospitWorkId.id);
+            let lechWorkO;
+            if (itemLechWorkId) {
+                lechWorkO = cathReports.find(el => el.itemId === itemLechWorkId.id);
+            }
+            //const lechWorkO = cathReports.find(el => el.itemId === itemLechWorkId.id);
+            let mejWorkO;
+            if (itemMejWorkId) {
+                mejWorkO = cathReports.find(el => el.itemId === itemMejWorkId.id);
+            }
+           // const mejWorkO = cathReports.find(el => el.itemId === itemMejWorkId.id);
+           let indXirshO;
+           if (itemIndXirshId) {
+            indXirshO = cathReports.find(el => el.itemId === itemIndXirshId.id);
+           }
+            //const indXirshO = cathReports.find(el => el.itemId === itemIndXirshId.id);
+            let indXirshScopO;
+            if (itemIndXirshScopId) {
+                indXirshScopO = cathReports.find(el => el.itemId === itemIndXirshScopId.id);
+            }
+            //const indXirshScopO = cathReports.find(el => el.itemId === itemIndXirshScopId.id);
+            let colvoScopO;
+            if (itemColvoScopId) {
+                colvoScopO = cathReports.find(el => el.itemId === itemColvoScopId.id);
+            }
+           // const colvoScopO = cathReports.find(el => el.itemId === itemColvoScopId.id);
+           let colvoWoSO;
+           if (itemColvoWoSId) {
+             colvoWoSO = cathReports.find(el => el.itemId === itemColvoWoSId.id);
+           }
+            //const colvoWoSO = cathReports.find(el => el.itemId === itemColvoWoSId.id);
+            let covidWorkO;
+            if (itemCovidWorkId) {
+                covidWorkO = cathReports.find(el => el.itemId === itemCovidWorkId.id);
+            }
+           // const covidWorkO = cathReports.find(el => el.itemId === itemCovidWorkId.id);
  
             const objReport = {id: 0, fullname: cathName.name, type: 'objReport',cathedraId: cathId, 
-            stavka: stavkaO.selectvalue,
-            uchWork: uchWorkO && Number(stavkaO.selectvalue) ? Number(uchWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0, 
-            uchMetWork: uchMetWorkO && Number(stavkaO.selectvalue) ? Number(uchMetWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            nauchWork: nauchWorkO && Number(stavkaO.selectvalue) ? Number(nauchWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            vospitWork: vospitWorkO && Number(stavkaO.selectvalue) ? Number(vospitWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            lechWork: lechWorkO && Number(stavkaO.selectvalue) ? Number(lechWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            mejWork: mejWorkO && Number(stavkaO.selectvalue) ? Number(mejWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            indXirsh: indXirshO && Number(stavkaO.selectvalue) ? Number(indXirshO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            indXirshScop: indXirshScopO && Number(stavkaO.selectvalue) ? Number(indXirshScopO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            colvoScop: colvoScopO && Number(stavkaO.selectvalue) ? Number(colvoScopO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            colvoWoS: colvoWoSO && Number(stavkaO.selectvalue) ? Number(colvoWoSO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
-            covidWork: covidWorkO && Number(stavkaO.selectvalue) ? Number(covidWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            stavka: stavkaO ? stavkaO.selectvalue : 0,
+            uchWork: uchWorkO && stavkaO && Number(stavkaO.selectvalue) ? Number(uchWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0, 
+            uchMetWork: uchMetWorkO && stavkaO && Number(stavkaO.selectvalue) ? Number(uchMetWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            nauchWork: nauchWorkO && stavkaO && Number(stavkaO.selectvalue) ? Number(nauchWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            vospitWork: vospitWorkO && stavkaO && Number(stavkaO.selectvalue) ? Number(vospitWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            lechWork: lechWorkO && stavkaO && Number(stavkaO.selectvalue) ? Number(lechWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            mejWork: mejWorkO && stavkaO && Number(stavkaO.selectvalue) ? Number(mejWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            indXirsh: indXirshO && stavkaO && Number(stavkaO.selectvalue) ? Number(indXirshO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            indXirshScop: indXirshScopO && stavkaO && Number(stavkaO.selectvalue) ? Number(indXirshScopO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            colvoScop: colvoScopO && stavkaO && Number(stavkaO.selectvalue) ? Number(colvoScopO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            colvoWoS: colvoWoSO && stavkaO && Number(stavkaO.selectvalue) ? Number(colvoWoSO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
+            covidWork: covidWorkO && stavkaO && Number(stavkaO.selectvalue) ? Number(covidWorkO.ball_value/Number(stavkaO.selectvalue)).toFixed(2) : 0,
         }
 
             arr.push(objReport)
@@ -92,30 +140,92 @@ class RatingController {
 
                     if(ownReports && ownReports.length) {
     
-                        const stavka = ownReports.find(el => el.itemId === itemStavkaId.id);
-                        const uchWork = ownReports.find(el => el.itemId === itemUchWorkId.id);
-                        const uchMetWork = ownReports.find(el => el.itemId === itemUchMetWorkId.id);
-                        const dolj = ownReports.find(el => el.itemId === itemDoljId.id);
-                        const stepen = ownReports.find(el => el.itemId === itemStepenId.id);
-                        const age = ownReports.find(el => el.itemId === itemAgeId.id);
-                        const nauchWork = ownReports.find(el => el.itemId === itemNauchWorkId.id);
-                        const vospitWork = ownReports.find(el => el.itemId === itemVospitWorkId.id);
-                        const lechWork = ownReports.find(el => el.itemId === itemLechWorkId.id);
-                        const mejWork = ownReports.find(el => el.itemId === itemMejWorkId.id);
-                        const indXirsh = ownReports.find(el => el.itemId === itemIndXirshId.id);
-                        const indXirshScop = ownReports.find(el => el.itemId === itemIndXirshScopId.id);
-                        const colvoScop = ownReports.find(el => el.itemId === itemColvoScopId.id);
-                        const colvoWoS = ownReports.find(el => el.itemId === itemColvoWoSId.id);
-                        const covidWork = ownReports.find(el => el.itemId === itemCovidWorkId.id);
+                        let stavka;
+                        if (itemStavkaId) {
+                            stavka = ownReports.find(el => el.itemId === itemStavkaId.id);
+                        }
+                        //const stavka = ownReports.find(el => el.itemId === itemStavkaId.id);
+                        let uchWork;
+                        if (itemUchWorkId) {
+                            uchWork = ownReports.find(el => el.itemId === itemUchWorkId.id);
+                        }
+                        //const uchWork = ownReports.find(el => el.itemId === itemUchWorkId.id);
+                        let uchMetWork;
+                        if (itemUchMetWorkId) {
+                            uchMetWork = ownReports.find(el => el.itemId === itemUchMetWorkId.id);
+                        }
+                        //const uchMetWork = ownReports.find(el => el.itemId === itemUchMetWorkId.id);
+                        let dolj;
+                        if (itemDoljId) {
+                            dolj = ownReports.find(el => el.itemId === itemDoljId.id);
+                        }
+                        //const dolj = ownReports.find(el => el.itemId === itemDoljId.id);
+                        let stepen;
+                        if (itemStepenId) {
+                            stepen = ownReports.find(el => el.itemId === itemStepenId.id);
+                        }
+                        //const stepen = ownReports.find(el => el.itemId === itemStepenId.id);
+                        let age;
+                        if (itemAgeId) {
+                            age = ownReports.find(el => el.itemId === itemAgeId.id);
+                        }
+                        //const age = ownReports.find(el => el.itemId === itemAgeId.id);
+                        let nauchWork;
+                        if (itemNauchWorkId) {
+                            nauchWork = ownReports.find(el => el.itemId === itemNauchWorkId.id);
+                        }
+                        //const nauchWork = ownReports.find(el => el.itemId === itemNauchWorkId.id);
+                        let vospitWork;
+                        if (itemVospitWorkId) {
+                            vospitWork = ownReports.find(el => el.itemId === itemVospitWorkId.id);
+                        }
+                        //const vospitWork = ownReports.find(el => el.itemId === itemVospitWorkId.id);
+                        let lechWork;
+                        if (itemLechWorkId) {
+                            lechWork = ownReports.find(el => el.itemId === itemLechWorkId.id);
+                        }
+                        //const lechWork = ownReports.find(el => el.itemId === itemLechWorkId.id);
+                        let mejWork;
+                        if (itemMejWorkId) {
+                            mejWork = ownReports.find(el => el.itemId === itemMejWorkId.id);
+                        }
+                        //const mejWork = ownReports.find(el => el.itemId === itemMejWorkId.id);
+                        let indXirsh;
+                        if (itemIndXirshId) {
+                            indXirsh = ownReports.find(el => el.itemId === itemIndXirshId.id);
+                        }
+                        //const indXirsh = ownReports.find(el => el.itemId === itemIndXirshId.id);
+                        let indXirshScop;
+                        if (itemIndXirshScopId) {
+                            indXirshScop = ownReports.find(el => el.itemId === itemIndXirshScopId.id);
+                        }
+                        //const indXirshScop = ownReports.find(el => el.itemId === itemIndXirshScopId.id);
+                        let colvoScop;
+                        if (itemColvoScopId) {
+                            colvoScop = ownReports.find(el => el.itemId === itemColvoScopId.id);
+                        }
+                       // const colvoScop = ownReports.find(el => el.itemId === itemColvoScopId.id);
+                       let colvoWoS;
+                       if (itemColvoWoSId) {
+                        colvoWoS = ownReports.find(el => el.itemId === itemColvoWoSId.id);
+                       }
+                        //const colvoWoS = ownReports.find(el => el.itemId === itemColvoWoSId.id);
+                        let covidWork;
+                        if (itemCovidWorkId) {
+                            covidWork = ownReports.find(el => el.itemId === itemCovidWorkId.id);
+                        }
+                        //const covidWork = ownReports.find(el => el.itemId === itemCovidWorkId.id);
            
-                       let obj = {id: i + 1, userId: us.id, fullname: us.fullname, cathedraId: cathId, stavka: stavka.selectvalue,
+                       let obj = {id: i + 1, userId: us.id, fullname: us.fullname, cathedraId: cathId, 
+                       stavka: stavka ? stavka.selectvalue : 0,
                        uchWork: uchWork ? Number(uchWork.ball_value).toFixed(2) : 0, 
-                       uchMetWork: uchMetWork && Number(stavka.selectvalue) ? Number(uchMetWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
-                       dolj: dolj.selectvalue, stepen: stepen.selectvalue, age: age.selectvalue,
-                        nauchWork: nauchWork && Number(stavka.selectvalue) ? Number(nauchWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
-                        vospitWork: vospitWork && Number(stavka.selectvalue) ? Number(vospitWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
+                       uchMetWork: uchMetWork && stavka && Number(stavka.selectvalue) ? Number(uchMetWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
+                       dolj: dolj ? dolj.selectvalue : '', stepen: stepen ? stepen.selectvalue : '', 
+                        age: age ? age.selectvalue : '',
+                        nauchWork: nauchWork && stavka && Number(stavka.selectvalue) ? Number(nauchWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
+                        vospitWork: vospitWork && stavka && Number(stavka.selectvalue) ? Number(vospitWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
                         lechWork: lechWork ? Number(lechWork.ball_value).toFixed(2) : 0,
-                        mejWork: mejWork && Number(stavka.selectvalue) ? Number(mejWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
+                        mejWork: mejWork && stavka && Number(stavka.selectvalue) ? Number(mejWork.ball_value/Number(stavka.selectvalue)).toFixed(2) : 0,
                         indXirsh: indXirsh ? Number(indXirsh.ball_value).toFixed(2) : 0,
                         indXirshScop: indXirshScop ? Number(indXirshScop.ball_value).toFixed(2) : 0,
                         colvoScop: colvoScop ? Number(colvoScop.ball_value).toFixed(2) : 0,

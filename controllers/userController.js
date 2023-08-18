@@ -3,10 +3,10 @@ const ActiveDirectory = require("activedirectory");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/models");
 const config = {
-  url: "ldap://172.20.0.71",
-  baseDN: "OU=Users,OU=University,dc=bsmu,dc=by",
-  username: "webapps@bsmu.by",
-  password: "!QAZ2wsx",
+  url: process.env.USERS_BASE_URL,
+  baseDN: process.env.USERS_BASE_DN,
+  username: process.env.DEFAULT_USERNAME,
+  password: process.env.DEFAULT_PASSWORD,
 };
 
 const generateJwt = (id, login, role, name) => {

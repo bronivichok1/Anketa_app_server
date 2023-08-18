@@ -8,6 +8,12 @@ const User = sequelize.define('user', {
     role: {type: DataTypes.STRING, defaultValue: 'USER'},
 })
 
+const UserCathedra = sequelize.define('user_cathedra', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    userId: {type: DataTypes.INTEGER},
+    cathedraId: {type: DataTypes.INTEGER},
+})
+
 const Cathedra = sequelize.define('cathedra', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, allowNull: false},
@@ -72,6 +78,8 @@ const ReportLocal = sequelize.define('reportlocal', {
     selectvalue: {type: DataTypes.STRING},
     itemId: {type: DataTypes.INTEGER},
     resultId: {type: DataTypes.INTEGER},
+    userId: {type: DataTypes.INTEGER},
+    cathedraId: {type: DataTypes.INTEGER}
 })
 
 const MassivLocal = sequelize.define('massivlocal', {
@@ -176,11 +184,9 @@ Select_name.belongsTo(Item);
 Result.hasMany(Report);
 Report.belongsTo(Result);
 
-User.hasOne(ReportLocal);
-ReportLocal.belongsTo(User);
-
 module.exports = {
     User,
+    UserCathedra,
     Item,
     Report,
     Select_name,

@@ -1,6 +1,7 @@
 const Router = require('express');
 const router = new Router;
 const userRouter = require('./userRouter');
+const userCathedrasRouter = require('./userCathedrasRouter');
 const itemRouter = require('./itemRouter');
 const reportRouter = require('./reportRouter');
 const resultRouter = require('./resultRouter');
@@ -22,6 +23,7 @@ const authorsRouter = require('./authorsRouter');
 const bookReportRouter = require('./bookReportRouter');
 
 router.use('/user', userRouter);
+router.use('/userCathedras', userCathedrasRouter);
 router.use('/item', itemRouter);
 router.use('/report', reportRouter);
 router.use('/result', resultRouter);

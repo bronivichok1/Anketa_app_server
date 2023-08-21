@@ -14,14 +14,18 @@ const UserCathedra = sequelize.define('user_cathedra', {
     cathedraId: {type: DataTypes.INTEGER},
 })
 
+const CathedralResponsible = sequelize.define('cathedral_responsible', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    cathedraId: {type: DataTypes.INTEGER},
+    userId: {type: DataTypes.INTEGER},
+})
+
 const Cathedra = sequelize.define('cathedra', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, allowNull: false},
-    user_name: {type: DataTypes.STRING},
     faculty_id: {type: DataTypes.INTEGER},
-    clin_or_teor: {type: DataTypes.STRING},
+    clin_or_teor: {type: DataTypes.INTEGER},
     cath_type_id: {type: DataTypes.INTEGER},
-    user_id: {type: DataTypes.INTEGER},
 })
 
 const Item = sequelize.define('item', {
@@ -100,6 +104,11 @@ const Cath_type = sequelize.define('cath_type', {
     name: {type: DataTypes.STRING, allowNull: false},
 })
 
+const CathValue = sequelize.define('cath_value', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+})
+
 const CathResult = sequelize.define('cath_result', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     result: {type: DataTypes.INTEGER}, //Numeric
@@ -164,11 +173,6 @@ const Book_Report = sequelize.define('book_report', {
     cath_result_id: {type: DataTypes.INTEGER}
 })
 
-
-
-Cathedra.hasMany(User);
-User.belongsTo(Cathedra);
-
 User.hasOne(Report);
 Report.belongsTo(User);
 
@@ -187,6 +191,7 @@ Report.belongsTo(Result);
 module.exports = {
     User,
     UserCathedra,
+    CathedralResponsible,
     Item,
     Report,
     Select_name,
@@ -197,6 +202,7 @@ module.exports = {
     MassivLocal,
     Faculty,
     Cath_type,
+    CathValue,
     CathResult,
     CathReport,
     ColvoSelects,

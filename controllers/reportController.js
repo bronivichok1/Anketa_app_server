@@ -190,7 +190,7 @@ class ReportController {
         })
 
         const report = await ReportLocal.destroy({
-          where: { userId: userId }
+          where: { userId: userId, cathedraId: localUser.cathedraId }
         });
 
         const massiv = await MassivLocal.destroy({

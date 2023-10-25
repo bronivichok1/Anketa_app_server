@@ -8,14 +8,24 @@ const User = sequelize.define('user', {
     role: {type: DataTypes.STRING, defaultValue: 'USER'},
 })
 
+const UserCathedra = sequelize.define('user_cathedra', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    userId: {type: DataTypes.INTEGER},
+    cathedraId: {type: DataTypes.INTEGER},
+})
+
+const CathedralResponsible = sequelize.define('cathedral_responsible', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    cathedraId: {type: DataTypes.INTEGER},
+    userId: {type: DataTypes.INTEGER},
+})
+
 const Cathedra = sequelize.define('cathedra', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, allowNull: false},
-    user_name: {type: DataTypes.STRING},
     faculty_id: {type: DataTypes.INTEGER},
-    clin_or_teor: {type: DataTypes.STRING},
+    clin_or_teor: {type: DataTypes.INTEGER},
     cath_type_id: {type: DataTypes.INTEGER},
-    user_id: {type: DataTypes.INTEGER},
 })
 
 const Item = sequelize.define('item', {
@@ -72,6 +82,8 @@ const ReportLocal = sequelize.define('reportlocal', {
     selectvalue: {type: DataTypes.STRING},
     itemId: {type: DataTypes.INTEGER},
     resultId: {type: DataTypes.INTEGER},
+    userId: {type: DataTypes.INTEGER},
+    cathedraId: {type: DataTypes.INTEGER}
 })
 
 const MassivLocal = sequelize.define('massivlocal', {
@@ -88,6 +100,11 @@ const Faculty = sequelize.define('faculty', {
 })
 
 const Cath_type = sequelize.define('cath_type', {
+    id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
+    name: {type: DataTypes.STRING, allowNull: false},
+})
+
+const CathValue = sequelize.define('cath_value', {
     id: {type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true},
     name: {type: DataTypes.STRING, allowNull: false},
 })
@@ -156,11 +173,6 @@ const Book_Report = sequelize.define('book_report', {
     cath_result_id: {type: DataTypes.INTEGER}
 })
 
-
-
-Cathedra.hasMany(User);
-User.belongsTo(Cathedra);
-
 User.hasOne(Report);
 Report.belongsTo(User);
 
@@ -176,11 +188,10 @@ Select_name.belongsTo(Item);
 Result.hasMany(Report);
 Report.belongsTo(Result);
 
-User.hasOne(ReportLocal);
-ReportLocal.belongsTo(User);
-
 module.exports = {
     User,
+    UserCathedra,
+    CathedralResponsible,
     Item,
     Report,
     Select_name,
@@ -191,6 +202,7 @@ module.exports = {
     MassivLocal,
     Faculty,
     Cath_type,
+    CathValue,
     CathResult,
     CathReport,
     ColvoSelects,

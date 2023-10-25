@@ -3,10 +3,10 @@ const ActiveDirectory = require("activedirectory");
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/models");
 const config = {
-  url: "ldap://172.20.0.71",
-  baseDN: "OU=Users,OU=University,dc=bsmu,dc=by",
-  username: "webapps@bsmu.by",
-  password: "!QAZ2wsx",
+  url: process.env.USERS_BASE_URL,
+  baseDN: process.env.USERS_BASE_DN,
+  username: process.env.DEFAULT_USERNAME,
+  password: process.env.DEFAULT_PASSWORD,
 };
 
 const generateJwt = (id, login, role, name) => {
@@ -33,13 +33,15 @@ async function findName(next, login, role, res) {
     } else {
       console.log(JSON.stringify(user.cn));
       const sec = user.cn;
-      end(login, role, sec, res);
+      end(user.userPrincipalName, role, sec, res);
     }
   });
 }
 
 async function end(login, role, sec, res) {
-  const user = await User.create({ login, role, fullname: sec });
+  let user = await User.findOne({ where: { login: login, fullname: sec } });
+  if (!user)
+    user = await User.create({ login, role, fullname: sec });
   const token = generateJwt(user.id, user.login, user.role, user.fullname);
   return res.json({ token });
 }
@@ -51,7 +53,7 @@ async function createAdm(login, role, res, next) {
     const token = generateJwt(candidate.id, candidate.login, candidate.role, candidate.fullname);
     return res.json({ token });
   } else {
-    console.log("Authenticated!");
+    console.log("Not Authenticated!");
     findName(next, login, role, res);
   }
 }
@@ -85,51 +87,51 @@ class UserController {
 
   async update(req, res, next) {
     try {
-        const id = req.params.id;
-        const user = req.body;
-        if (!user.id) {
-            res.status(400).json( {message: 'Id не указан'});
-        }
-        const updatedUser = await User.update(user, {
-            where: {id: id},
-        })
-        
-        return res.json(updatedUser);
-    } catch(e) {
-        
-        next(ApiError.badRequest(e.message));
-    }
-}
+      const id = req.params.id;
+      const user = req.body;
+      if (!user.id) {
+        res.status(400).json({ message: 'Id не указан' });
+      }
+      const updatedUser = await User.update(user, {
+        where: { id: id },
+      })
 
-async getOne(req, res) {
-  const {id} = req.params;
-  const user = await User.findOne({
-      where: {id}
-  })
-  return res.json(user);
-}
+      return res.json(updatedUser);
+    } catch (e) {
 
-async find(req, res, next) {
-  try {
-    const { id } = req.params;
-    //console.log(req.params);
-    if (!id) {
-      res.status(400).json({ message: "Id не указан" });
+      next(ApiError.badRequest(e.message));
     }
-    const users = await User.findAll({
-      where: { cathedraId: id },
-    });
-    return res.json(users);
-  } catch (e) {
-    next(ApiError.badRequest(e.message));
   }
-}
 
-async findAdmins(req, res, next) {
- 
+  async getOne(req, res) {
+    const { id } = req.params;
+    const user = await User.findOne({
+      where: { id }
+    })
+    return res.json(user);
+  }
+
+  async find(req, res, next) {
+    try {
+      const { id } = req.params;
+      //console.log(req.params);
+      if (!id) {
+        res.status(400).json({ message: "Id не указан" });
+      }
+      const users = await User.findAll({
+        where: { cathedraId: id },
+      });
+      return res.json(users);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
+  }
+
+  async findAdmins(req, res, next) {
+
     const admins = await User.findAll();
     return res.json(admins);
-}
+  }
 
 }
 

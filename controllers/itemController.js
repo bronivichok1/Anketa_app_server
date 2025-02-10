@@ -1,6 +1,6 @@
 const ApiError = require("../error/ApiError");
 const { Item } = require("../models/models");
-
+const {Sequelize} = require("sequelize")
 function createTree(arr) {
   if (!arr || !arr.length) { return []; }
   var tree = [], map = new Map();
@@ -251,18 +251,21 @@ class ItemController {
     }
   }
 
-  async getMassivItems(req, res) {
-    try {
+async getMassivItems(req, res, next) {
+  try {
       const items = await Item.findAll({
-        where: {type: 'Массив данных'}
-    })
-    return res.json(items);
-    } catch(e) {
+          where: { type: 'Массив данных' },
+          order: [
+              [Sequelize.literal(`string_to_array(num, '.')::int[]`)]  
+          ]
+      });
+
+      return res.json(items);
+  } catch (e) {
       next(ApiError.badRequest(e.message));
-    }
   }
 }
 
-
+}
 
 module.exports = new ItemController();

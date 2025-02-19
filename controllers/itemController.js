@@ -251,20 +251,38 @@ class ItemController {
     }
   }
 
-async getMassivItems(req, res, next) {
-  try {
-      const items = await Item.findAll({
-          where: { type: 'Массив данных' },
-          order: [
-              [Sequelize.literal(`string_to_array(num, '.')::int[]`)]  
-          ]
-      });
+  async getMassivItems(req, res, next) {
+    try {
+        const items = await Item.findAll({
+            where: { type: 'Массив данных' },
+            order: [
+                [Sequelize.literal(`string_to_array(num, '.')::int[]`)]
+            ],
+            raw: true 
+        });
 
-      return res.json(items);
-  } catch (e) {
-      next(ApiError.badRequest(e.message));
-  }
+        const itemIds = items.map(item => item.parentId).filter(Boolean); 
+
+        const parents = await Item.findAll({
+            where: { id: itemIds },
+            raw: true
+        });
+
+        const itemsWithParents = items.map(item => {
+            const parent = parents.find(p => p.id === item.parentId);
+            return {
+                ...item,
+                parent: parent ? parent : null 
+            };
+        });
+
+        return res.json(itemsWithParents);
+    } catch (e) {
+        next(ApiError.badRequest(e.message));
+    }
 }
+
+
 
 }
 

@@ -258,10 +258,10 @@ class ItemController {
             order: [
                 [Sequelize.literal(`string_to_array(num, '.')::int[]`)]
             ],
-            raw: true 
+            raw: true
         });
 
-        const itemIds = items.map(item => item.parentId).filter(Boolean); 
+        const itemIds = items.map(item => item.parentId).filter(Boolean);
 
         const parents = await Item.findAll({
             where: { id: itemIds },
@@ -270,9 +270,15 @@ class ItemController {
 
         const itemsWithParents = items.map(item => {
             const parent = parents.find(p => p.id === item.parentId);
+            let parentInfo = null;
+
+            if (parent) {
+                parentInfo = String(parent.num) + ". " + parent.name;
+            }
+
             return {
                 ...item,
-                parent: parent ? parent : null 
+                parent: parent ? { ...parent, name: parentInfo } : null 
             };
         });
 
@@ -281,6 +287,7 @@ class ItemController {
         next(ApiError.badRequest(e.message));
     }
 }
+
 
 
 
